@@ -21,7 +21,6 @@ from pathlib import Path
 
 from datasets import load_dataset
 
-# Integer labels in the dataset map to these names, in this order.
 LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
 
 HERE = Path(__file__).parent
@@ -39,12 +38,12 @@ def sample_tweets(per_class, seed, min_words, max_words):
     rng = random.Random(seed)
     selected = []
     for name in LABELS:
-        pool = sorted(buckets[name])          # sorted() keeps the draw reproducible
+        pool = sorted(buckets[name])         
         if len(pool) < per_class:
             raise SystemExit(f"only {len(pool)} usable tweets for '{name}'")
         selected += [(name, t) for t in rng.sample(pool, per_class)]
 
-    rng.shuffle(selected)                     # so the file is not grouped by emotion
+    rng.shuffle(selected)                  
     return selected
 
 

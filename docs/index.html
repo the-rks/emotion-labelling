@@ -102,7 +102,7 @@
     <li>Select the single emotion you think the person who wrote it is expressing:
       anger, fear, joy, love, sadness, or surprise.</li>
     <li>Base your answer on the writer's emotion, not your own reaction.</li>
-    <li>There is no skip option — choose the closest match.</li>
+    <li>There is no skip option, please choose the closest match.</li>
     <li>Tweets are shown exactly as written (typos included).</li>
   </ol>
 
@@ -176,8 +176,8 @@ function randomId() {
 }
 $("pid").value = randomId();
 
-// Simple seeded shuffle so each participant gets a different, but
-// reproducible-on-reload, random sample of tweets.
+
+
 function hashCode(str) {
   let h = 0;
   for (let i = 0; i < str.length; i++) {
@@ -297,7 +297,7 @@ async function trySend() {
   $("retry-btn").hidden = true;
 
   if (!CONFIG.ENDPOINT) {
-    box.innerHTML = '<div class="msg warn">No backend configured — download the CSV below instead.</div>';
+    box.innerHTML = '<div class="msg warn">Download the CSV below instead.</div>';
     return;
   }
 
