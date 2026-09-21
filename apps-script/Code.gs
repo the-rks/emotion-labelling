@@ -17,7 +17,7 @@
 
 // Optional. Create a folder in your Drive, open it, and copy the id from the
 // URL (drive.google.com/drive/folders/THIS_PART). Leave "" to skip backups.
-var BACKUP_FOLDER_ID = "";
+var BACKUP_FOLDER_ID = "1yJIKqBUBQV-1mpKnGcnrYwvGZVvpA662";
 
 var SHEET_NAME = "responses";
 

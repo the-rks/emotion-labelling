@@ -2,386 +2,361 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Emotion labeling study</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emotion Labeling Task</title>
 <style>
-  :root{
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-    --paper:#FBFAF7; --panel:#FFFFFF; --ink:#1B1E24; --ink-soft:#5A606B;
-    --rule:#DDD9D0; --focus:#2F4B8F;
-    --anger:#A33528; --fear:#5B4A9E; --joy:#B3790A;
-    --love:#AD3E74; --sadness:#3A6784; --surprise:#157466;
-    color-scheme:light;
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #222;
+    line-height: 1.5;
   }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --paper:#15171B; --panel:#1D2026; --ink:#ECEAE4; --ink-soft:#A2A8B4;
-      --rule:#333842; --focus:#8EA8E8;
-      --anger:#E0796A; --fear:#A493E8; --joy:#E2AE4A; --love:#E484B4;
-      --sadness:#78ABCB; --surprise:#4FBFAC;
-      color-scheme:dark;
-    }
+  h1 {
+    font-size: 22px;
   }
-  *,*::before,*::after{box-sizing:inherit}
-  html,body{margin:0}
-  body{background:var(--paper);color:var(--ink);
-    font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:38rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
-  h1{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:2rem;line-height:1.2;margin:0 0 .5rem}
-  h2{font-weight:600;font-size:1.05rem;margin:2rem 0 .5rem}
-  p{margin:0 0 1rem;max-width:34rem}
-  .lede{color:var(--ink-soft)}
-  ol{padding-left:1.15rem;margin:0 0 1rem;max-width:34rem}
-  li{margin-bottom:.4rem}
-  a{color:var(--focus)}
-  .field{margin:1.25rem 0}
-  label.lbl{display:block;font-weight:500;margin-bottom:.35rem}
-  .hint{color:var(--ink-soft);font-size:.875rem;margin:.35rem 0 0}
-  input[type=text]{width:100%;max-width:22rem;padding:.6rem .7rem;font:inherit;color:inherit;
-    background:var(--panel);border:1px solid var(--rule);border-radius:3px}
-  button{font:inherit}
-  .btn{display:inline-block;padding:.7rem 1.4rem;border:1px solid var(--ink);
-    background:var(--ink);color:var(--paper);border-radius:3px;cursor:pointer;font-weight:500}
-  .btn:disabled{opacity:.35;cursor:not-allowed}
-  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
-  :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-  .progress{display:flex;gap:.4rem;align-items:center;margin-bottom:.5rem}
-  .pip{width:2.1rem;height:3px;background:var(--rule);border-radius:2px}
-  .pip.done{background:var(--ink)}
-  .pip.now{background:var(--focus)}
-  .tweet{font-family:"Newsreader",Georgia,serif;font-size:1.5rem;line-height:1.45;
-    border-left:2px solid var(--rule);padding:.25rem 0 .25rem 1.1rem;margin:1.5rem 0 1.75rem}
-  .ask{font-weight:500;margin-bottom:.75rem}
-  .choices{display:grid;gap:.5rem;margin:0 0 1.5rem;padding:0;border:0}
-  .choice{display:flex;align-items:center;gap:.75rem;padding:.7rem .9rem;cursor:pointer;
-    background:var(--panel);border:1px solid var(--rule);border-radius:4px}
-  .choice:hover{border-color:var(--ink-soft)}
-  .choice input{position:absolute;opacity:0;width:0;height:0}
-  .dot{width:.85rem;height:.85rem;border-radius:50%;flex:none;background:var(--c)}
-  .choice .name{font-weight:500}
-  .choice .gloss{color:var(--ink-soft);font-size:.875rem}
-  .choice:has(input:checked){border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c)}
-  .choice:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:2px}
-  .row{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
-  .note{font-size:.875rem;color:var(--ink-soft)}
-  .tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin:1rem 0}
-  table{border-collapse:collapse;width:100%;font-size:.875rem;min-width:32rem}
-  th,td{text-align:left;padding:.5rem .65rem;border-bottom:1px solid var(--rule);vertical-align:top}
-  th{font-weight:600;white-space:nowrap}
-  tr:last-child td{border-bottom:0}
-  td.txt{max-width:20rem}
-  .status{padding:.75rem .9rem;border:1px solid var(--rule);border-left-width:3px;
-    border-radius:3px;margin:1rem 0;font-size:.9375rem}
-  .status.ok{border-left-color:var(--surprise)}
-  .status.bad{border-left-color:var(--anger)}
-  .status.warn{border-left-color:var(--joy)}
-  footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);
-    font-size:.8125rem;color:var(--ink-soft)}
-  [hidden]{display:none !important}
+  ol {
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 6px;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  input[type="text"] {
+    padding: 6px;
+    font-size: 14px;
+    width: 250px;
+    margin-top: 5px;
+  }
+  button {
+    padding: 8px 18px;
+    font-size: 14px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  hr {
+    margin: 25px 0;
+  }
+  #tweet-box {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 15px 0;
+    font-size: 17px;
+  }
+  .option {
+    display: block;
+    margin: 6px 0;
+  }
+  #progress-text {
+    color: #555;
+    font-size: 14px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    text-align: left;
+  }
+  .msg {
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+  }
+  .msg.ok { background: #e8f5e9; border-color: #a5d6a7; }
+  .msg.bad { background: #fdecea; border-color: #f5c6cb; }
+  .msg.warn { background: #fff8e1; border-color: #ffe082; }
+  [hidden] { display: none; }
 </style>
 </head>
 <body>
-<main class="wrap">
 
-  <section id="intro">
-    <h1>Which emotion is this person expressing?</h1>
-    <p class="lede">A short annotation task for a course assignment on human data collection. It takes about two minutes.</p>
+<h1>Emotion Labeling Task</h1>
+<p>EECS 594 — Human Data Collection Assignment</p>
 
-    <h2>What you'll do</h2>
-    <ol>
-      <li>You'll see <strong><span id="ntweets">5</span> tweets</strong>, one at a time, drawn at random from a public research dataset.</li>
-      <li>For each one, choose the <strong>single emotion the writer is expressing</strong>: anger, fear, joy, love, sadness, or surprise.</li>
-      <li>Judge the writer's emotion, not your own reaction to the tweet, and not the emotion of anyone mentioned in it.</li>
-      <li>Go with your first instinct. There's no skip button, so pick the closest fit even when none is perfect.</li>
-      <li>Tweets appear exactly as written, including typos and missing punctuation.</li>
-    </ol>
+<section id="intro">
+  <p>
+    This task uses tweets from the
+    <a href="https://huggingface.co/datasets/dair-ai/emotion" target="_blank">dair-ai/emotion</a>
+    dataset. You will be shown <span id="ntweets">5</span> tweets, one at a time,
+    randomly selected from the dataset.
+  </p>
 
-    <h2>What gets recorded</h2>
-    <p>Your participant ID, each tweet you saw, the label you gave it, how long you took, and the time you submitted. Nothing else — no IP address, no browser fingerprint, no Google sign-in. The data is used only for a class assignment.</p>
+  <p><b>Instructions:</b></p>
+  <ol>
+    <li>Read each tweet.</li>
+    <li>Select the single emotion you think the person who wrote it is expressing:
+      anger, fear, joy, love, sadness, or surprise.</li>
+    <li>Base your answer on the writer's emotion, not your own reaction.</li>
+    <li>There is no skip option — choose the closest match.</li>
+    <li>Tweets are shown exactly as written (typos included).</li>
+  </ol>
 
-    <div class="field">
-      <label class="lbl" for="pid">Your participant ID</label>
-      <input type="text" id="pid" autocomplete="off" spellcheck="false" maxlength="40">
-      <p class="hint">Pre-filled with a random code. Replace it with your name or uniqname if the researcher asked you to.</p>
-    </div>
+  <p><b>What is recorded:</b> your participant ID, the tweets you were shown, your
+  selected label for each one, how long you took, and the submission time.</p>
 
-    <p><button class="btn" id="start">Start labeling</button></p>
-    <p class="note">Participation is voluntary and you can close this page at any point before submitting.</p>
-  </section>
+  <label for="pid">Participant ID</label>
+  <input type="text" id="pid" autocomplete="off">
 
-  <section id="task" hidden>
-    <div class="progress" id="progress" aria-hidden="true"></div>
-    <p class="note" id="counter" aria-live="polite"></p>
-    <blockquote class="tweet" id="tweet"></blockquote>
-    <p class="ask">Which emotion is the writer expressing?</p>
-    <fieldset class="choices" id="choices">
-      <legend style="position:absolute;left:-9999px">Emotion</legend>
-    </fieldset>
-    <div class="row"><button class="btn" id="next" disabled>Next tweet</button></div>
-  </section>
+  <br>
+  <button id="start-btn">Start</button>
+</section>
 
-  <section id="done" hidden>
-    <h1>Thank you — your labels are recorded</h1>
-    <p class="lede">Here is what was saved for participant <strong id="doneid"></strong>.</p>
-    <div id="sendstatus"></div>
-    <div class="tablewrap">
-      <table id="results">
-        <thead><tr><th>#</th><th>Tweet ID</th><th>Tweet</th><th>Your label</th><th>Seconds</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="row">
-      <button class="btn ghost" id="csv">Download my responses (CSV)</button>
-      <button class="btn ghost" id="retry" hidden>Try sending again</button>
-    </div>
-    <footer>
-      Tweets come from the <a href="https://huggingface.co/datasets/dair-ai/emotion" target="_blank" rel="noopener">dair-ai/emotion</a> dataset (Saravia et al., 2018).
-    </footer>
-  </section>
-</main>
+<section id="task" hidden>
+  <p id="progress-text"></p>
+  <div id="tweet-box"></div>
+
+  <p><b>Which emotion is being expressed?</b></p>
+  <div id="options"></div>
+
+  <button id="next-btn" disabled>Next</button>
+</section>
+
+<section id="done" hidden>
+  <h2>Submitted</h2>
+  <p>Participant ID: <b id="done-pid"></b></p>
+  <div id="send-status"></div>
+
+  <table id="results-table">
+    <thead>
+      <tr><th>#</th><th>Tweet ID</th><th>Tweet</th><th>Your Label</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <br>
+  <button id="csv-btn">Download CSV</button>
+  <button id="retry-btn" hidden>Retry Send</button>
+</section>
+
+<hr>
+<p style="font-size:12px;color:#777;">
+  Dataset: Saravia et al. (2018), CARER: Contextualized Affect Representations for Emotion Recognition.
+</p>
 
 <script src="config.js"></script>
 <script src="tweets.js"></script>
 <script>
-const EMOTIONS = [
-  {id:"anger",    label:"Anger",    gloss:"irritation, resentment, rage",       color:"var(--anger)"},
-  {id:"fear",     label:"Fear",     gloss:"worry, anxiety, dread",              color:"var(--fear)"},
-  {id:"joy",      label:"Joy",      gloss:"happiness, excitement, contentment", color:"var(--joy)"},
-  {id:"love",     label:"Love",     gloss:"affection, tenderness, devotion",    color:"var(--love)"},
-  {id:"sadness",  label:"Sadness",  gloss:"loneliness, grief, disappointment",  color:"var(--sadness)"},
-  {id:"surprise", label:"Surprise", gloss:"shock, astonishment, disbelief",     color:"var(--surprise)"}
-];
-
-const $ = (s) => document.querySelector(s);
+const EMOTIONS = ["anger", "fear", "joy", "love", "sadness", "surprise"];
 const N = CONFIG.TWEETS_PER_PARTICIPANT || 5;
-const state = {participant:"", session:"", items:[], index:0, responses:[], shownAt:0, choice:null};
 
-$("#ntweets").textContent = N;
+const $ = (id) => document.getElementById(id);
 
-/* ---------- participant id + random assignment ---------- */
-function randomCode(){
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = new Uint32Array(5);
-  crypto.getRandomValues(bytes);
-  return "P-" + Array.from(bytes, b => alphabet[b % alphabet.length]).join("");
-}
-$("#pid").value = randomCode();
+let state = {
+  participant: "",
+  session: "",
+  items: [],
+  index: 0,
+  responses: [],
+  shownAt: 0,
+  choice: null
+};
 
-/* Seeded shuffle: the same session always gets the same tweets (so a
-   mid-task reload doesn't silently reassign), while different participants
-   get different ones. */
-function hash32(str){
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
-  return h >>> 0;
+$("ntweets").textContent = N;
+
+function randomId() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "";
+  for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return "P-" + out;
 }
-function mulberry32(seed){
-  return function(){
-    seed = (seed + 0x6D2B79F5) >>> 0;
-    let t = seed;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-function sampleTweets(seedStr, n){
-  const rnd = mulberry32(hash32(seedStr));
-  const pool = TWEETS.slice();
-  for (let i = pool.length - 1; i > 0; i--){
-    const j = Math.floor(rnd() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+$("pid").value = randomId();
+
+// Simple seeded shuffle so each participant gets a different, but
+// reproducible-on-reload, random sample of tweets.
+function hashCode(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h * 31 + str.charCodeAt(i)) | 0;
   }
-  return pool.slice(0, n);
+  return h;
+}
+function seededShuffle(arr, seed) {
+  let a = arr.slice();
+  let s = seed;
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
-function show(name){
-  for (const id of ["intro","task","done"]) $("#" + id).hidden = (id !== name);
+function showSection(id) {
+  ["intro", "task", "done"].forEach(s => $(s).hidden = (s !== id));
   window.scrollTo(0, 0);
 }
 
-$("#start").addEventListener("click", () => {
-  const pid = $("#pid").value.trim();
-  if (!pid){ $("#pid").focus(); return; }
+$("start-btn").addEventListener("click", () => {
+  const pid = $("pid").value.trim();
+  if (!pid) { $("pid").focus(); return; }
+
   state.participant = pid;
-  state.session = randomCode().slice(2) + "-" + Date.now().toString(36);
-  state.items = sampleTweets(pid + "|" + state.session, N);
+  state.session = randomId() + "-" + Date.now();
+  state.items = seededShuffle(TWEETS, hashCode(pid + state.session)).slice(0, N);
   state.index = 0;
   state.responses = [];
-  show("task");
-  renderItem();
+
+  showSection("task");
+  renderTweet();
 });
 
-/* ---------- one tweet at a time ---------- */
-function renderItem(){
+function renderTweet() {
   const item = state.items[state.index];
   state.choice = null;
-  state.shownAt = performance.now();
+  state.shownAt = Date.now();
 
-  const p = $("#progress");
-  p.innerHTML = "";
-  state.items.forEach((_, i) => {
-    const pip = document.createElement("span");
-    pip.className = "pip" + (i < state.index ? " done" : i === state.index ? " now" : "");
-    p.appendChild(pip);
-  });
-  $("#counter").textContent = "Tweet " + (state.index + 1) + " of " + state.items.length;
-  $("#tweet").textContent = item.text;
+  $("progress-text").textContent = "Tweet " + (state.index + 1) + " of " + state.items.length;
+  $("tweet-box").textContent = item.text;
 
-  const box = $("#choices");
-  box.querySelectorAll("label").forEach(n => n.remove());
-  for (const e of EMOTIONS){
-    const lab = document.createElement("label");
-    lab.className = "choice";
-    lab.style.setProperty("--c", e.color);
-    lab.innerHTML =
-      '<input type="radio" name="emotion" value="' + e.id + '">' +
-      '<span class="dot"></span>' +
-      '<span><span class="name">' + e.label + '</span> <span class="gloss">' + e.gloss + '</span></span>';
-    lab.querySelector("input").addEventListener("change", () => {
-      state.choice = e.id;
-      $("#next").disabled = false;
+  const box = $("options");
+  box.innerHTML = "";
+  EMOTIONS.forEach(e => {
+    const label = document.createElement("label");
+    label.className = "option";
+    label.innerHTML =
+      '<input type="radio" name="emotion" value="' + e + '"> ' +
+      e.charAt(0).toUpperCase() + e.slice(1);
+    label.querySelector("input").addEventListener("change", () => {
+      state.choice = e;
+      $("next-btn").disabled = false;
     });
-    box.appendChild(lab);
-  }
-  $("#next").disabled = true;
-  $("#next").textContent = (state.index === state.items.length - 1) ? "Submit my labels" : "Next tweet";
+    box.appendChild(label);
+  });
+
+  $("next-btn").disabled = true;
+  $("next-btn").textContent = (state.index === state.items.length - 1) ? "Submit" : "Next";
 }
 
-$("#next").addEventListener("click", () => {
+$("next-btn").addEventListener("click", () => {
   if (!state.choice) return;
   const item = state.items[state.index];
+
   state.responses.push({
-    session_id:     state.session,
+    session_id: state.session,
     participant_id: state.participant,
-    position:       state.index + 1,
-    tweet_id:       item.id,
-    tweet_text:     item.text,
-    dataset_label:  item.label,     // ground truth, never shown to the participant
-    chosen_label:   state.choice,
+    position: state.index + 1,
+    tweet_id: item.id,
+    tweet_text: item.text,
+    dataset_label: item.label,
+    chosen_label: state.choice,
     agrees_with_dataset: state.choice === item.label,
-    response_ms:    Math.round(performance.now() - state.shownAt),
-    submitted_at:   new Date().toISOString()
+    response_ms: Date.now() - state.shownAt,
+    submitted_at: new Date().toISOString()
   });
+
   state.index++;
-  if (state.index < state.items.length) renderItem();
-  else finish();
+  if (state.index < state.items.length) {
+    renderTweet();
+  } else {
+    finishTask();
+  }
 });
 
-/* ---------- sending to the Apps Script backend ----------
-   Apps Script does not answer CORS preflights, so the request must stay a
-   "simple" one: POST, text/plain body, no custom headers. That usually lets
-   us read the JSON reply. If the browser still blocks reading it, we resend
-   with mode:"no-cors" (delivered, but unreadable) and verify separately. */
-async function postLabels(){
-  const body = JSON.stringify({payload: state.responses});
+async function sendResponses() {
   const res = await fetch(CONFIG.ENDPOINT, {
     method: "POST",
-    headers: {"Content-Type": "text/plain;charset=utf-8"},
-    body: body,
-    redirect: "follow"
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ payload: state.responses })
   });
   const data = await res.json();
-  if (data.status !== "ok") throw new Error(data.message || "backend rejected the submission");
+  if (data.status !== "ok") throw new Error(data.message || "server error");
   return data;
 }
 
-async function postBlind(){
+async function sendBlind() {
   await fetch(CONFIG.ENDPOINT, {
     method: "POST",
     mode: "no-cors",
-    headers: {"Content-Type": "text/plain;charset=utf-8"},
-    body: JSON.stringify({payload: state.responses})
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ payload: state.responses })
   });
 }
 
-async function verify(){
-  const url = CONFIG.ENDPOINT + "?check=" + encodeURIComponent(state.session);
-  const res = await fetch(url, {method: "GET", redirect: "follow"});
+async function verifySent() {
+  const res = await fetch(CONFIG.ENDPOINT + "?check=" + encodeURIComponent(state.session));
   return await res.json();
 }
 
-async function trySend(){
-  const box = $("#sendstatus");
-  $("#retry").hidden = true;
+async function trySend() {
+  const box = $("send-status");
+  $("retry-btn").hidden = true;
 
-  if (!CONFIG.ENDPOINT){
-    box.innerHTML = '<div class="status warn">This copy of the task has no backend configured, ' +
-      'so nothing was sent. Download the CSV below and send it to the researcher.</div>';
+  if (!CONFIG.ENDPOINT) {
+    box.innerHTML = '<div class="msg warn">No backend configured — download the CSV below instead.</div>';
     return;
   }
 
-  box.innerHTML = '<div class="status">Saving your labels\u2026</div>';
-  try{
-    const data = await postLabels();
-    box.innerHTML = '<div class="status ok">Saved ' + data.saved +
-      ' labels at ' + new Date(data.received_at).toLocaleString() + '. You can close this page.</div>';
-    return;
-  }catch(err){
-    // Could not read the reply — send blind, then confirm with a GET.
-    try{
-      await postBlind();
-      let saved = null;
-      try{ saved = await verify(); }catch(e){ /* verification blocked too */ }
-      if (saved && saved.found > 0){
-        box.innerHTML = '<div class="status ok">Saved ' + saved.found +
-          ' labels. You can close this page.</div>';
+  box.innerHTML = '<div class="msg">Saving...</div>';
+  try {
+    const data = await sendResponses();
+    box.innerHTML = '<div class="msg ok">Saved ' + data.saved + ' responses. You can close this page.</div>';
+  } catch (err) {
+    try {
+      await sendBlind();
+      const check = await verifySent().catch(() => null);
+      if (check && check.found > 0) {
+        box.innerHTML = '<div class="msg ok">Saved ' + check.found + ' responses.</div>';
       } else {
-        box.innerHTML = '<div class="status warn">Your labels were submitted, but this page ' +
-          'could not confirm it. If the researcher asks, download the CSV below and send it along.</div>';
+        box.innerHTML = '<div class="msg warn">Submitted, but could not confirm. Download the CSV as backup.</div>';
       }
-    }catch(err2){
-      box.innerHTML = '<div class="status bad">Your labels could not be sent: ' +
-        String(err2.message || err2) + '. Try again, or download the CSV below.</div>';
-      $("#retry").hidden = false;
+    } catch (err2) {
+      box.innerHTML = '<div class="msg bad">Could not send responses: ' + err2.message + '</div>';
+      $("retry-btn").hidden = false;
     }
   }
 }
-$("#retry").addEventListener("click", trySend);
+$("retry-btn").addEventListener("click", trySend);
 
-async function finish(){
-  show("done");
-  $("#doneid").textContent = state.participant;
-  renderResults();
-  await trySend();
-}
+function finishTask() {
+  showSection("done");
+  $("done-pid").textContent = state.participant;
 
-/* ---------- confirmation table + CSV ---------- */
-function renderResults(){
-  const tb = $("#results").querySelector("tbody");
-  tb.innerHTML = "";
-  state.responses.forEach((r) => {
+  const tbody = $("results-table").querySelector("tbody");
+  tbody.innerHTML = "";
+  state.responses.forEach(r => {
     const tr = document.createElement("tr");
-    [r.position, r.tweet_id, r.tweet_text, r.chosen_label, (r.response_ms / 1000).toFixed(1)]
-      .forEach((v, j) => {
-        const td = document.createElement("td");
-        if (j === 2) td.className = "txt";
-        td.textContent = v;
-        tr.appendChild(td);
-      });
-    tb.appendChild(tr);
+    tr.innerHTML =
+      "<td>" + r.position + "</td>" +
+      "<td>" + r.tweet_id + "</td>" +
+      "<td>" + r.tweet_text + "</td>" +
+      "<td>" + r.chosen_label + "</td>";
+    tbody.appendChild(tr);
   });
+
+  trySend();
 }
 
-const CSV_FIELDS = ["session_id","participant_id","position","tweet_id","tweet_text",
-                    "dataset_label","chosen_label","agrees_with_dataset","response_ms","submitted_at"];
+$("csv-btn").addEventListener("click", () => {
+  const fields = ["session_id","participant_id","position","tweet_id","tweet_text",
+                   "dataset_label","chosen_label","agrees_with_dataset","response_ms","submitted_at"];
+  const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [fields.join(",")];
+  state.responses.forEach(r => lines.push(fields.map(f => esc(r[f])).join(",")));
 
-$("#csv").addEventListener("click", () => {
-  const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
-  const lines = [CSV_FIELDS.join(",")].concat(
-    state.responses.map(r => CSV_FIELDS.map(f => esc(r[f])).join(","))
-  );
-  const url = URL.createObjectURL(new Blob([lines.join("\n")], {type:"text/csv;charset=utf-8"}));
+  const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "labels-" + state.participant + ".csv";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  a.href = url;
+  a.download = "labels-" + state.participant + ".csv";
+  a.click();
+  URL.revokeObjectURL(url);
 });
 </script>
+
 </body>
 </html>
